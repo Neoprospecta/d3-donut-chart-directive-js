@@ -8,26 +8,32 @@
     <body>
         <div style="display: block">
             <div 
-                style="display: inline-block"
                 class="donut-chart" 
-                url="./mock/mock.json" 
-                colorScheme="schemeSet1"
+                colorScheme="schemeCategory20b"
                 size="400"
+                style="display: inline-block"
+                tooltip="popover"
+                tooltip-msg="Show de <br> bola <strong>{{value}}</strong>!"
+                url="./mock/mock.json" 
             ></div>
             <div 
-                style="display: inline-block"
                 class="donut-chart" 
                 label="taxonomia"
                 slice="reads"
                 size="600"
+                style="display: inline-block"
+                tooltip="circle"
+                tooltip-msg="Quantidade de <br>reads = {{reads}}!"
                 url="http://www.mocky.io/v2/5a94693f3500003c009b0e95" 
             ></div>
             <div 
-                style="display: inline-block"
                 class="donut-chart" 
-                url="./mock/mock.json" 
                 colorScheme="schemeSet2"
                 size="300"
+                style="display: inline-block"
+                tooltip="circle"
+                tooltip-msg="Show de <br> bola!"
+                url="./mock/mock.json" 
             ></div>
         </div>
     </body>
