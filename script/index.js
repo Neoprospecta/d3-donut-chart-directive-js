@@ -16,6 +16,8 @@ d3.selectAll(".donut-chart")
         svg.style('height', height);
         svg.style('padding-left', '45px');
         svg.style('padding-right', '45px');
+        svg.style('padding-top', '10px');
+        svg.style('padding-bottom', '10px');
 
         var g = svg.append('g')
             .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
@@ -31,8 +33,8 @@ d3.selectAll(".donut-chart")
             .padAngle(0.015);
         // this arc is used for aligning the text labels
         var outerArc = d3.arc()
-            .outerRadius(radius * 0.9)
-            .innerRadius(radius * 0.9);
+            .outerRadius(radius)
+            .innerRadius(radius);
 
         var label = parentNode.getAttribute('label') ? parentNode.getAttribute('label') : 'name';
         var slice = parentNode.getAttribute('slice') ? parentNode.getAttribute('slice') : 'value';
