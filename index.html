@@ -6,19 +6,27 @@
     </head>
 
     <body>
-        <div 
-            class="donut-chart" 
-            url="./mock/mock.json" 
-            colorScheme="schemeSet1"
-            size="600"
-        ></div>
-        <div 
-            class="donut-chart" 
-            label="taxonomia"
-            slice="reads"
-            size="300"
-            url="http://www.mocky.io/v2/5a94693f3500003c009b0e95" 
-        ></div>
+        <div style="display: block">
+            <div style="display: inline-block"
+                class="donut-chart" 
+                url="./mock/mock.json" 
+                colorScheme="schemeSet1"
+                size="200"
+            ></div>
+            <div style="display: inline-block"
+                class="donut-chart" 
+                label="taxonomia"
+                slice="reads"
+                size="600"
+                url="http://www.mocky.io/v2/5a94693f3500003c009b0e95" 
+            ></div>
+            <div style="display: inline-block"
+                class="donut-chart" 
+                url="./mock/mock.json" 
+                colorScheme="schemeSet2"
+                size="300"
+            ></div>
+        </div>
     </body>
     
     <script src="https://d3js.org/d3.v4.min.js"></script>
