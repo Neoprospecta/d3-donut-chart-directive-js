@@ -2,7 +2,8 @@ const DEFAULT_SIZE = 260;
 var thickness = 40;
 var duration = 750;
 
-var div = d3.select(".donut-chart").append("div").attr("class", "toolTip");
+var toolTipDiv = d3.select(".donut-chart").append("div").attr("class", "toolTip");
+var circleTipDiv = d3.select(".donut-chart").append("div").attr("class", "circleTip");
 d3.selectAll(".donut-chart")
     .append('svg')
     .attr('class', 'pie')
@@ -38,7 +39,7 @@ d3.selectAll(".donut-chart")
 
         var label = parentNode.getAttribute('label') ? parentNode.getAttribute('label') : 'name';
         var slice = parentNode.getAttribute('slice') ? parentNode.getAttribute('slice') : 'value';
-        var tooltipStyle = parentNode.getAttribute('tooltip') ? parentNode.getAttribute('tooltip') : 'popover';
+        var tooltipStyle = parentNode.getAttribute('tooltip') ? parentNode.getAttribute('tooltip') : 'circle';
         var tooltipMsg = parentNode.getAttribute('tooltip-msg') ? parentNode.getAttribute('tooltip-msg') : '';
 
         var pie = d3.pie()
@@ -51,7 +52,7 @@ d3.selectAll(".donut-chart")
 
         d3.json(parentNode.getAttribute('url'), function (res) {
             var data = res;
-            
+
             // add and colour the donut slices
             var path = g.select('.slices')
                 .datum(data)
@@ -62,14 +63,27 @@ d3.selectAll(".donut-chart")
                 .style("opacity", 0.9)
                 .attr('d', arc)
                 .attr('fill', (d, i) => color(i))
+                .attr("data", function (d) {
+                    d.data["percentage"] = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
+                    return JSON.stringify(d.data);
+                })
                 .on("mousemove", function (d) {
+                    var currentEl = d3.select(this);
+                    var tooltipData = JSON.parse(currentEl.attr("data"));
                     if (tooltipStyle === 'popover') {
-                        div.transition()
+                        toolTipDiv.transition()
                             .duration(150)
                             .style("opacity", 1);
-                        div.style("left", d3.event.pageX + 10 + "px");
-                               div.style("top", d3.event.pageY - 25 + "px");
-                        div.html(/* (d.data.value) + */ extractVariables(tooltipMsg, d));
+                        toolTipDiv.style("left", d3.event.pageX + 10 + "px");
+                        toolTipDiv.style("top", d3.event.pageY - 25 + "px");
+                        toolTipDiv.html(extractVariables(tooltipMsg, d));
+                    } else {
+                        toolTipDiv.transition()
+                            .duration(150)
+                            .style("opacity", 1);
+                        toolTipDiv.style("left", d3.event.pageX + 10 + "px");
+                        toolTipDiv.style("top", d3.event.pageY - 25 + "px");
+                        toolTipDiv.html(d3.format("0.2f")(tooltipData["percentage"]) + "%");
                     }
                 })
                 .on("mouseover", function (d) {
@@ -77,34 +91,35 @@ d3.selectAll(".donut-chart")
                         .style("cursor", "pointer")
                         .style("opacity", 1);
                 })
-                .on("mouseout", function (d) {
-                    d3.select(this)
-                        .style("cursor", "none")
-                        .style("fill", color(this._current))
-                        .style("opacity", 0.9);
-                    div.transition()
-                        .duration(300)
-                        .style("opacity", 0);
-                    d3.selectAll('.toolCircle').remove();
-
-                })
                 .on('mouseenter', function (d) {
-                    if (tooltipStyle === 'circle') {
+                    if (tooltipStyle === 'circle' && tooltipMsg !== '') {
                         svg.append('text')
                             .attr('transform', 'translate(' + (width / 2) + ',' + (width / 2) + ')')
-                            .attr('class', 'toolCircle')
+                            .attr('class', 'toolCircleMsg')
                             .attr('dy', -15) // hard-coded. can adjust this to adjust text vertical alignment in tooltip
                             .html(extractVariables(tooltipMsg, d)) // add text to the circle.
-                            .style('font-size', '.9em')
-                            .style('text-anchor', 'middle'); // centres text in tooltip
+                            .style('font-size', '1em')
+                            .style('text-anchor', 'middle') // centres text in tooltip
 
                         svg.append('circle')
                             .attr('transform', 'translate(' + (width / 2) + ',' + (width / 2) + ')')
                             .attr('class', 'toolCircle')
                             .attr('r', radius * 0.55) // radius of tooltip circle
                             .attr('fill', color(this._current)) // colour based on category mouse is over
-                            .style('fill-opacity', 0.35);
+                            .style('fill-opacity', 0.35)
                     }
+
+                })
+                .on("mouseout", function (d) {
+                    d3.select(this)
+                        .style("cursor", "none")
+                        .style("fill", color(this._current))
+                        .style("opacity", 0.9);
+                    toolTipDiv.transition()
+                        .duration(300)
+                        .style("opacity", 0);
+                    d3.selectAll('.toolCircle').remove();
+                    d3.selectAll('.toolCircleMsg').remove();
 
                 })
                 .each(function (d, i) { this._current = i; });
@@ -157,7 +172,7 @@ d3.selectAll(".donut-chart")
 
         function extractVariables(str, data) {
             var param = str.match(/{{(.*)}}/);
-            if(param){
+            if (param) {
                 param = param.pop();
                 return str.replace(/{{(\w+)}}/g, data.data[param]);
             }
