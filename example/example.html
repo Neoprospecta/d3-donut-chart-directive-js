@@ -1,8 +1,7 @@
 <htnl>
-
     <head>
       <meta charset="utf-8">
-      <link rel="stylesheet" type="text/css" href="style/index.css">
+      <link rel="stylesheet" type="text/css" href="../style/d3-donut-chart.min.css">
     </head>
 
     <body>
@@ -18,20 +17,18 @@
             ></div>
             <div 
                 class="donut-chart" 
-                label="taxonomia"
+                label="taxonomy"
                 slice="reads"
                 size="600"
                 style="display: inline-block"
                 tooltip="circle"
-                tooltip-msg="Quantidade de </br>reads = {{reads}}!"
-                url="http://www.mocky.io/v2/5a94693f3500003c009b0e95" 
+                tooltip-msg="Amount of reads </br>reads: {{reads}}!"
+                url="http://www.mocky.io/v2/5a985ae62e000001075532fb" 
             ></div>
             <div 
                 class="donut-chart" 
-                colorScheme="schemeSet2"
                 size="300"
                 style="display: inline-block"
-                tooltip="circle"
                 url="./mock/mock.json" 
             ></div>
         </div>
@@ -40,6 +37,6 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 
-    <script src="script/index.js"></script>
+    <script src="../script/d3-donut-chart.min.js"></script>
 
 </htnl>
