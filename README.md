@@ -1,15 +1,15 @@
 # D3 Donut Chart Directive for JavaScript
 
-### A JavaScript library that provide easy way to create donut chart simply setting atributes in a div.
+### A JavaScript library that provide easy way to create donut chart simply setting atributes in a <div> tag.
 
 ## How to use:
-- Import **d3-donut-chart-directive** in the html that you want to use.
+- Import **d3-donut-chart-directive** in the html file that you want to use.
 
 ```html
 <htnl>
     <head>
       <meta charset="utf-8">
-      <link rel="stylesheet" type="text/css" href="../style/d3-donut-chart.min.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/fe7abafb/style/d3-donut-chart.min.css">
     </head>
 
     <body>
@@ -19,7 +19,7 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 
-    <script src="../script/d3-donut-chart.min.js"></script>
+    <script src="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/fe7abafb/script/d3-donut-chart.min.js"></script>
 
 </htnl>
 ```
@@ -31,6 +31,7 @@
     ...
     <div 
         class="donut-chart" 
+        colorScheme="schemeCategory20b"
         label="taxonomy"
         slice="reads"
         size="600"
@@ -48,7 +49,7 @@
 ```json
 [
         {
-        "taxonomy": 2759,
+                "taxonomy": 2759,
 		"reads": 294481
 	},
 	{
@@ -75,12 +76,35 @@
 
 ![N|Solid](./resources/donut_chart.png)
 
+
+## Attributes Table
+| Attr | Type | Default | Values | Required |
+| ------ | ------ | ------ | ------ | ------ |
+| class | string | - | "donut-chart" | True |
+| colorScheme | string | "schemeCategory10" | ["schemeAccent", "schemeDark2", "schemePastel2", "schemeSet2", "schemeSet1", "schemePastel1", "schemeCategory10", "schemeSet3", "schemePaired", "schemeCategory20", "schemeCategory20b", "schemeCategory20c"] | False |
+| label | string | "name" | Type a json column name (Ex: "taxonomy"). | False |
+| slice | string | "value" | Type a json column name (Ex: "reads"). | False |
+| size | string | "300" | Type a value (Ex: "400"). | False |
+| tooltip | string | "circle" | ["circle", "popover"] | False |
+| tooltip-msg | string | - | Type a message (Ex: "Number of reads: {{reads}}") | False |
+| url | string | - | Type a url or a path (Ex: "../mock.json" or "http://domain.com/get_json_file") | True |
+
+
 ## Atributes details
 
 #### **CLASS DONUT-CHART** 
-- Is the key attr to indicate that the div render a donut chart.
+- It's the key attr to indicate that the div render a donut chart.
 ```html
 class="donut-chart"
+```
+
+#### **COLORSCHEME** 
+- Specify the d3 scale chromatic that the donut directive use to paint each of the chart's slice. For more information take a look in these links: 
+- https://github.com/d3/d3-scale-chromatic  
+- https://bl.ocks.org/pstuffa/3393ff2711a53975040077b7453781a9
+
+```html
+colorScheme="schemeCategory20b"
 ```
 
 #### **LABEL** 
@@ -102,7 +126,8 @@ size="300"
 ```
 
 #### **TOOLTIP** 
-- Specify the style of tooltip that is rendered when mouse is hover the one slice. Have two styles "circle" that is a circle inside the donut and "popover" that is a popover over the mouse pointer.
+- Specify the style of tooltip that is rendered when mouse is hover a slice. 
+Have two styles: First the "circle" that is a circle inside the donut and second, the "popover" that is a popover above the mouse pointer. When circle is setted, the popover is showed with percentage of each slice when mouse over then. But when popover is setted, popover is overrided by the new message.
 ```html
 tooltip="circle"
 ```
@@ -124,17 +149,6 @@ url="http://www.mocky.io/v2/5a94693f3500003c009b0e95"
 ```html
 url="./mock/mock.json"
 ```
-
-## Attributes Table
-| Attr | Function |
-| ------ | ------ |
-| class | -|
-| label | -|
-| slice | -|
-| size | -|
-| tooltip | -|
-| tooltip-msg | -|
-| url | -|
 
 ## License
 

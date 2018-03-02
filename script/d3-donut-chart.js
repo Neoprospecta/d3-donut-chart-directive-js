@@ -1,4 +1,4 @@
-const DEFAULT_SIZE = 260;
+const DEFAULT_SIZE = 300;
 var thickness = 40;
 var duration = 750;
 
