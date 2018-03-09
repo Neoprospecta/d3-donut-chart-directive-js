@@ -15,10 +15,8 @@ d3.selectAll(".donut-chart")
 
         svg.style('width', width);
         svg.style('height', height);
-        svg.style('padding-left', '45px');
-        svg.style('padding-right', '45px');
-        svg.style('padding-top', '10px');
-        svg.style('padding-bottom', '10px');
+        svg.style('padding', '10px 45px');
+        svg.style('overflow', 'visible');
 
         var g = svg.append('g')
             .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
