@@ -1,0 +1,25 @@
+{
+  "name": "d3-donut-chart-directive-js",
+  "version": "0.1.0",
+  "description": "A JavaScript library that provide easy way to create donut chart simply setting atributes in a <div> tag.",
+  "keywords": [
+    "Javascript",
+    "D3.js",
+    "donut",
+    "chart"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Neoprospecta/d3-donut-chart-directive-js/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neoprospecta/d3-donut-chart-directive-js.git"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-uglifycss": "^1.0.9"
+  },
+  "dependencies": {},
+  "peerDependencies": {}
+}
