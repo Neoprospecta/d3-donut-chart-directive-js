@@ -9,7 +9,7 @@
 <htnl>
     <head>
       <meta charset="utf-8">
-      <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/fe7abafb/style/d3-donut-chart.min.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/Neoprospecta/d3-donut-chart-directive-js/72280c9b/dist/style.min.css">
     </head>
 
     <body>
@@ -19,7 +19,7 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 
-    <script src="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/d16f1fc3/script/d3-donut-chart.min.js"></script>
+    <script src="https://cdn.rawgit.com/Neoprospecta/d3-donut-chart-directive-js/72280c9b/dist/script.min.js"></script>
 
 </htnl>
 ```
