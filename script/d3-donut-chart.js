@@ -1,4 +1,4 @@
-const DEFAULT_SIZE = 300;
+var DEFAULT_SIZE = 300;
 var thickness = 40;
 var duration = 750;
 
@@ -10,7 +10,8 @@ d3.selectAll(".donut-chart")
     .each(function (d, i) {
         var svg = d3.select(this);
         var parentNode = svg._groups[0][0].parentElement;
-        var width = height = parentNode.getAttribute('size') ? parentNode.getAttribute('size') : DEFAULT_SIZE;
+        var width = parentNode.getAttribute('width') ? parentNode.getAttribute('width') : DEFAULT_SIZE;
+        var height = parentNode.getAttribute('height') ? parentNode.getAttribute('height') : DEFAULT_SIZE;
         var radius = Math.min(width, height) / 2;
 
         svg.style('width', width);
@@ -19,11 +20,16 @@ d3.selectAll(".donut-chart")
         svg.style('overflow', 'visible');
 
         var g = svg.append('g')
-            .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
+            .attr('transform', 'translate(' + (width / 2) + ',' + (width / 2) + ')');
 
         g.append('g').attr('class', 'slices');
         g.append('g').attr('class', 'labelName');
         g.append('g').attr('class', 'lines');
+
+        var legend = svg.append('g')
+            .attr('class', 'legend')
+            .attr('transform', 'translate(10,' + (parseInt(width) + 10) + ')')
+            .style("font-size", "12px");
 
         var arc = d3.arc()
             .outerRadius(radius * 0.8)
@@ -36,9 +42,11 @@ d3.selectAll(".donut-chart")
             .innerRadius(radius * 0.9);
 
         var label = parentNode.getAttribute('label') ? parentNode.getAttribute('label') : 'name';
+        var labelStyle = parentNode.getAttribute('labelStyle') ? parentNode.getAttribute('labelStyle') : 'text';
         var slice = parentNode.getAttribute('slice') ? parentNode.getAttribute('slice') : 'value';
-        var tooltipStyle = parentNode.getAttribute('tooltip') ? parentNode.getAttribute('tooltip') : 'circle';
+        var tooltip = parentNode.getAttribute('tooltip') ? parentNode.getAttribute('tooltip') : 'circle';
         var tooltipMsg = parentNode.getAttribute('tooltip-msg') ? parentNode.getAttribute('tooltip-msg') : '';
+        var legendParam = parentNode.getAttribute('legend') ? parentNode.getAttribute('legend') : '';
 
         var pie = d3.pie()
             .value(function (d) { return d[slice]; })
@@ -60,7 +68,8 @@ d3.selectAll(".donut-chart")
                 .append('path')
                 .style("opacity", 0.9)
                 .attr('d', arc)
-                .attr('fill', (d, i) => color(i))
+                .attr('fill', function (d, i) { return color(i) })
+                .attr("data-legend", function (d) { return d.data[legendParam] })
                 .attr("data", function (d) {
                     d.data["percentage"] = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
                     return JSON.stringify(d.data);
@@ -68,14 +77,14 @@ d3.selectAll(".donut-chart")
                 .on("mousemove", function (d) {
                     var currentEl = d3.select(this);
                     var tooltipData = JSON.parse(currentEl.attr("data"));
-                    if (tooltipStyle === 'popover') {
+                    if (tooltip === 'popover') {
                         toolTipDiv.transition()
                             .duration(150)
                             .style("opacity", 1);
                         toolTipDiv.style("left", d3.event.pageX + 10 + "px");
                         toolTipDiv.style("top", d3.event.pageY - 25 + "px");
                         toolTipDiv.html(extractVariables(tooltipMsg, d));
-                    } else {
+                    } else if (tooltip === 'percentage') {
                         toolTipDiv.transition()
                             .duration(150)
                             .style("opacity", 1);
@@ -90,7 +99,7 @@ d3.selectAll(".donut-chart")
                         .style("opacity", 1);
                 })
                 .on('mouseenter', function (d) {
-                    if (tooltipStyle === 'circle' && tooltipMsg !== '') {
+                    if (tooltip === 'circle' && tooltipMsg !== '') {
                         svg.append('text')
                             .attr('transform', 'translate(' + (width / 2) + ',' + (width / 2) + ')')
                             .attr('class', 'toolCircleMsg')
@@ -122,45 +131,62 @@ d3.selectAll(".donut-chart")
                 })
                 .each(function (d, i) { this._current = i; });
 
-            // add text labels
-            g.select('.labelName')
-                .datum(data)
-                .selectAll('text')
-                .data(pie)
-                .enter()
-                .append('text')
-                .attr('dy', '.35em')
-                .html(function (d) {
-                    // add "key: value" for given category. Number inside tspan is bolded in stylesheet.
-                    return d.data[label];
-                })
-                .attr('transform', function (d) {
+            if (labelStyle !== 'none') {
+                // add text labels
+                g.select('.labelName')
+                    .datum(data)
+                    .selectAll('text')
+                    .data(pie)
+                    .enter()
+                    .append('text')
+                    .attr('dy', '.35em')
+                    .html(function (d) {
+                        if (labelStyle === 'percentage') {
+                            return d3.format("0.2f")(d.data['percentage']) + "%";
+                        } else if (labelStyle === 'text') { // default
+                            return d.data[label];
+                        }
+                    })
+                    .attr('transform', function (d) {
 
-                    // effectively computes the centre of the slice.
-                    var pos = outerArc.centroid(d);
+                        // effectively computes the centre of the slice.
+                        var pos = outerArc.centroid(d);
 
-                    // changes the point to be on left or right depending on where label is.
-                    pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
-                    return 'translate(' + pos + ')';
-                })
-                .style('text-anchor', function (d) {
-                    // if slice centre is on the left, anchor text to start, otherwise anchor to end
-                    return (midAngle(d)) < Math.PI ? 'start' : 'end';
-                });
+                        // changes the point to be on left or right depending on where label is.
+                        pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
+                        return 'translate(' + pos + ')';
+                    })
+                    .style('text-anchor', function (d) {
+                        // if slice centre is on the left, anchor text to start, otherwise anchor to end
+                        return (midAngle(d)) < Math.PI ? 'start' : 'end';
+                    });
 
-            // add lines connecting labels to slice. A polyline creates straight lines connecting several points
-            g.select('.lines')
-                .datum(data)
-                .selectAll('polyline')
-                .data(pie)
-                .enter()
-                .append('polyline')
-                .attr('points', function (d) {
-                    // see label transform function for explanations of these three lines.
-                    var pos = outerArc.centroid(d);
-                    pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
-                    return [arc.centroid(d), outerArc.centroid(d), pos]
-                });
+                // add lines connecting labels to slice. A polyline creates straight lines connecting several points
+                g.select('.lines')
+                    .datum(data)
+                    .selectAll('polyline')
+                    .data(pie)
+                    .enter()
+                    .append('polyline')
+                    .attr('points', function (d) {
+                        // see label transform function for explanations of these three lines.
+                        var pos = outerArc.centroid(d);
+                        pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
+                        return [arc.centroid(d), outerArc.centroid(d), pos]
+                    });
+            }
+
+            if (legendParam !== '') {
+                svg.select('.legend')
+                    .call(d3.legend);
+
+                /* setTimeout(function () { */
+                legend
+                    .style("font-size", "20px")
+                    .attr("data-style-padding", 10)
+                    .call(d3.legend)
+                /* }, 100) */
+            }
 
         });
 

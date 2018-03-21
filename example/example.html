@@ -1,7 +1,9 @@
 <htnl>
     <head>
       <meta charset="utf-8">
-      <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/fe7abafb/style/d3-donut-chart.min.css">
+      <link rel="stylesheet" type="text/css" href="../dist/style.min.css">
+      <!-- <link rel="stylesheet" type="text/css" href="../style/d3-donut-chart.css"> -->
+      <!-- <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/fe7abafb/style/d3-donut-chart.min.css"> -->
     </head>
 
     <body>
@@ -9,17 +11,21 @@
             <div 
                 class="donut-chart" 
                 colorScheme="schemeCategory20b"
-                size="400"
+                labelStyle="text"
+                width="400"
+                height="400"
                 style="display: inline-block"
-                tooltip="popover"
+                tooltip="percentage"
                 tooltip-msg="Show de <br> bola <strong>{{value}}</strong>!"
                 url="./mock/mock.json" 
             ></div>
             <div 
                 class="donut-chart" 
-                label="taxonomy"
+                labelStyle="percentage"
                 slice="reads"
-                size="600"
+                legend="taxonomy"
+                width="600"
+                height="600"
                 style="display: inline-block"
                 tooltip="circle"
                 tooltip-msg="Amount of reads </br>reads: {{reads}}!"
@@ -27,8 +33,12 @@
             ></div>
             <div 
                 class="donut-chart" 
-                size="300"
+                width="300"
+                height="400"
+                labelStyle="none"
+                legend="name"
                 style="display: inline-block"
+                tooltip="percentage"
                 url="./mock/mock.json" 
             ></div>
         </div>
@@ -37,6 +47,9 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 
-    <script src="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/d16f1fc3/script/d3-donut-chart.min.js"></script>
+    <script src="../dist/script.min.js"></script>
+    <!-- <script src="../script/d3.legend.js"></script>
+    <script src="../script/d3-donut-chart.js"></script> -->
+    <!-- <script src="https://cdn.rawgit.com/NetoRutes/d3-donut-chart-directive-js/d16f1fc3/script/d3-donut-chart.min.js"></script> -->
 
 </htnl>
